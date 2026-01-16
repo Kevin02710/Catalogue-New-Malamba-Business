@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backoffice - NEW MALAMBA BUSINESS</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #1a1a2e;
+            min-height: 100vh;
+            color: #fff;
+        }
+        
+        /* Header */
+        .admin-header {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+        }
+        
+        .admin-logo {
+            font-size: 1.5em;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+        
+        .admin-logo span {
+            color: #8b0000;
+        }
+        
+        .btn-preview {
+            background: #8b0000;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-weight: 600;
+            cursor: pointer;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-preview:hover {
+            background: #a00;
+            transform: translateY(-2px);
+        }
+        
+        /* Main Layout */
+        .admin-container {
+            display: flex;
+            min-height: calc(100vh - 80px);
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: #0f0f1a;
+            padding: 20px;
+            border-right: 1px solid #333;
+        }
+        
+        .sidebar-title {
+            font-size: 0.7em;
+            color: #888;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+        
+        .page-list {
+            list-style: none;
+        }
+        
+        .page-item {
+            padding: 12px 15px;
+            margin-bottom: 5px;
+            background: #1a1a2e;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .page-item:hover, .page-item.active {
+            background: #2a2a4e;
+            border-left: 3px solid #8b0000;
+        }
+        
+        .page-item .page-name {
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+        
+        .page-item .page-count {
+            font-size: 0.7em;
+            background: #333;
+            padding: 3px 8px;
+            border-radius: 10px;
+        }
+        
+        .btn-add-page {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            background: transparent;
+            border: 2px dashed #444;
+            color: #888;
+            font-size: 0.8em;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-add-page:hover {
+            border-color: #8b0000;
+            color: #fff;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+        
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .content-title {
+            font-size: 1.5em;
+            font-weight: 700;
+        }
+        
+        .btn-add-product {
+            background: #00cc6a;
+            color: #000;
+            border: none;
+            padding: 12px 24px;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-add-product:hover {
+            background: #00ff88;
+            transform: translateY(-2px);
+        }
+        
+        /* Page Settings */
+        .page-settings {
+            background: #0f0f1a;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+        
+        .settings-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 0.75em;
+            color: #888;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            background: #1a1a2e;
+            border: 1px solid #333;
+            color: #fff;
+            font-family: inherit;
+            font-size: 0.9em;
+            border-radius: 6px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #8b0000;
+        }
+        
+        /* Products Grid */
+        .products-admin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+        
+        .product-admin-card {
+            background: #0f0f1a;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #333;
+            transition: all 0.3s ease;
+        }
+        
+        .product-admin-card:hover {
+            border-color: #8b0000;
+            transform: translateY(-3px);
+        }
+        
+        .product-admin-image {
+            height: 150px;
+            background: #1a1a2e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .product-admin-image img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+        
+        .btn-change-image {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            font-size: 0.7em;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        
+        .product-admin-content {
+            padding: 20px;
+        }
+        
+        .product-admin-name {
+            font-size: 1em;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .product-admin-type {
+            font-size: 0.75em;
+            color: #888;
+            margin-bottom: 15px;
+        }
+        
+        .product-admin-prices {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .price-input-group {
+            flex: 1;
+        }
+        
+        .price-input-group label {
+            display: block;
+            font-size: 0.65em;
+            color: #888;
+            margin-bottom: 5px;
+        }
+        
+        .price-input-group input {
+            width: 100%;
+            padding: 10px;
+            background: #1a1a2e;
+            border: 1px solid #333;
+            color: #00ff88;
+            font-weight: 700;
+            font-size: 1em;
+            border-radius: 4px;
+        }
+        
+        .product-admin-features {
+            margin-bottom: 15px;
+        }
+        
+        .product-admin-features label {
+            display: block;
+            font-size: 0.65em;
+            color: #888;
+            margin-bottom: 5px;
+        }
+        
+        .product-admin-features textarea {
+            width: 100%;
+            height: 80px;
+            padding: 10px;
+            background: #1a1a2e;
+            border: 1px solid #333;
+            color: #fff;
+            font-size: 0.8em;
+            border-radius: 4px;
+            resize: vertical;
+        }
+        
+        .product-admin-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-save {
+            flex: 1;
+            padding: 10px;
+            background: #8b0000;
+            color: white;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        
+        .btn-delete {
+            padding: 10px 15px;
+            background: transparent;
+            color: #ff4444;
+            border: 1px solid #ff4444;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        
+        .btn-delete:hover {
+            background: #ff4444;
+            color: #fff;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: #1a1a2e;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            font-size: 1.2em;
+            font-weight: 700;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .modal-actions button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 6px;
+        }
+        
+        .btn-confirm {
+            background: #00cc6a;
+            color: #000;
+        }
+        
+        .btn-cancel {
+            background: #333;
+            color: #fff;
+        }
+        
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #00cc6a;
+            color: #000;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            transform: translateX(200%);
+            transition: transform 0.3s ease;
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast.error {
+            background: #ff4444;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="admin-header">
+        <div class="admin-logo">
+            <span>NEW MALAMBA</span> BACKOFFICE
+        </div>
+        <button class="btn-preview" onclick="generateCatalogue()">
+            Générer le Catalogue PDF
+        </button>
+    </header>
+    
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h3 class="sidebar-title">Pages du Catalogue</h3>
+            <ul class="page-list" id="pageList">
+                <!-- Pages will be loaded here -->
+            </ul>
+            <button class="btn-add-page" onclick="openAddPageModal()">
+                + Ajouter une page
+            </button>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <div class="content-header">
+                <h1 class="content-title" id="pageTitle">Sélectionnez une page</h1>
+                <button class="btn-add-product" onclick="openAddProductModal()" style="display: none;" id="btnAddProduct">
+                    + Ajouter un article
+                </button>
+            </div>
+            
+            <!-- Page Settings -->
+            <div class="page-settings" id="pageSettings" style="display: none;">
+                <div class="settings-row">
+                    <div class="form-group">
+                        <label>Titre de la page</label>
+                        <input type="text" id="pageTitleInput" placeholder="Ex: Selection Premium">
+                    </div>
+                    <div class="form-group">
+                        <label>Bannière promotionnelle</label>
+                        <input type="text" id="pageBannerInput" placeholder="Ex: Offres Exceptionnelles">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Products Grid -->
+            <div class="products-admin-grid" id="productsGrid">
+                <!-- Products will be loaded here -->
+            </div>
+        </main>
+    </div>
+    
+    <!-- Modal: Add Page -->
+    <div class="modal" id="addPageModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Nouvelle Page</h2>
+                <button class="modal-close" onclick="closeModal('addPageModal')">&times;</button>
+            </div>
+            <div class="form-group">
+                <label>Nom de la page</label>
+                <input type="text" id="newPageName" placeholder="Ex: Accessoires Informatiques">
+            </div>
+            <div class="form-group">
+                <label>Titre de section</label>
+                <input type="text" id="newPageTitle" placeholder="Ex: Selection Premium">
+            </div>
+            <div class="form-group">
+                <label>Texte bannière</label>
+                <input type="text" id="newPageBanner" placeholder="Ex: Offres Promotionnelles">
+            </div>
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeModal('addPageModal')">Annuler</button>
+                <button class="btn-confirm" onclick="addPage()">Créer la page</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal: Add Product -->
+    <div class="modal" id="addProductModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Nouvel Article</h2>
+                <button class="modal-close" onclick="closeModal('addProductModal')">&times;</button>
+            </div>
+            <div class="form-group">
+                <label>Nom du produit</label>
+                <input type="text" id="newProductName" placeholder="Ex: HP DeskJet 2320">
+            </div>
+            <div class="form-group">
+                <label>Type / Catégorie</label>
+                <input type="text" id="newProductType" placeholder="Ex: Imprimante Multifonction">
+            </div>
+            <div class="form-group">
+                <label>URL de l'image</label>
+                <input type="text" id="newProductImage" placeholder="https://...">
+            </div>
+            <div class="form-group">
+                <label>Badge (optionnel)</label>
+                <input type="text" id="newProductBadge" placeholder="Ex: -20%, PROMO, NEW">
+            </div>
+            <div class="form-group">
+                <label>Prix promotionnel ($)</label>
+                <input type="number" id="newProductPrice" placeholder="170">
+            </div>
+            <div class="form-group">
+                <label>Ancien prix ($) - optionnel</label>
+                <input type="number" id="newProductOldPrice" placeholder="230">
+            </div>
+            <div class="form-group">
+                <label>Caractéristiques (une par ligne)</label>
+                <textarea id="newProductFeatures" placeholder="Impression WiFi&#10;Copie et scan&#10;Économique"></textarea>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeModal('addProductModal')">Annuler</button>
+                <button class="btn-confirm" onclick="addProduct()">Ajouter l'article</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast -->
+    <div class="toast" id="toast">Sauvegardé avec succès!</div>
+    
+    <script>
+        // Initialize Data
+        let catalogueData = JSON.parse(localStorage.getItem('catalogueData')) || getDefaultData();
+        let currentPageId = null;
+        
+        function getDefaultData() {
+            return {
+                companyName: "New Malamba Business",
+                tagline: "Votre partenaire de qualité au meilleur prix !",
+                pages: [
+                    {
+                        id: 1,
+                        name: "Imprimantes EcoTank",
+                        title: "Selection Premium - Imprimantes EcoTank",
+                        banner: "Offres Promotionnelles Exceptionnelles",
+                        products: [
+                            {
+                                id: 1,
+                                name: "Epson EcoTank L3250 et L3252",
+                                type: "Imprimante Multifonction WiFi",
+                                image: "https://robot.epson.eu/files/assets/converted/1500m-1500m/a/1/7/8/a17899-productpicture-hires-en-int-l3250_1.header_2000x2000.png.png",
+                                badge: "-26%",
+                                price: 170,
+                                oldPrice: 230,
+                                features: ["Impression, copie et numerisation sans fil", "Economisez jusqu'a 95% sur vos couts", "3 ans d'encre fournie (8 100 pages)", "Application Epson Smart Panel"]
+                            },
+                            {
+                                id: 2,
+                                name: "Epson EcoTank L3210",
+                                type: "Imprimante Multifonction",
+                                image: "https://robot.epson.eu/files/assets/converted/1500m-1500m/3/0/2/2/30221-productpicture-lores-en-int-l3210_main.png.png",
+                                badge: "-26%",
+                                price: 170,
+                                oldPrice: 230,
+                                features: ["Impression, copie et numerisation", "Economisez jusqu'a 95% sur vos couts", "3 ans d'encre fournie (8 100 pages)", "Reservoir d'encre en facade"]
+                            },
+                            {
+                                id: 3,
+                                name: "HP DeskJet 2320",
+                                type: "Imprimante Tout-en-Un",
+                                image: "https://hp.widen.net/content/cbbj7ui8uv/png/cbbj7ui8uv.png?w=800&h=600&dpi=72&color=ffffff00",
+                                badge: "-23%",
+                                price: 50,
+                                oldPrice: 65,
+                                features: ["Impression, copie, numerisation", "Vitesse: 7,5 ppm noir / 5,5 ppm couleur", "Qualite: 1200 x 1200 ppp", "Design compact et elegant"]
+                            }
+                        ]
+                    },
+                    {
+                        id: 2,
+                        name: "HP LaserJet Pro",
+                        title: "Gamme Professionnelle",
+                        banner: "Imprimantes HP LaserJet - Selection Pro",
+                        products: [
+                            {
+                                id: 1,
+                                name: "HP LaserJet MFP M141a",
+                                type: "Imprimante Laser Multifonction",
+                                image: "https://hp.widen.net/content/u0elxq9zq4/png/u0elxq9zq4.png?w=800&h=600&dpi=72&color=ffffff00",
+                                badge: "PRO",
+                                price: 160,
+                                oldPrice: null,
+                                features: ["Impression, copie et numerisation", "Vitesse jusqu'a 20 ppm", "Resolution 600 x 600 ppp", "Connexion USB, ideal bureau"]
+                            },
+                            {
+                                id: 2,
+                                name: "HP LaserJet M111a",
+                                type: "Imprimante Laser Compacte",
+                                image: "https://hk-media.apjonlinecdn.com/catalog/product/cache/b3b166914d87ce343d4dc5ec5117b502/7/M/7MD67A-1_T1678934497.png",
+                                badge: "COMPACT",
+                                price: 115,
+                                oldPrice: null,
+                                features: ["Impression laser monochrome", "Vitesse jusqu'a 20 ppm", "Ultra compacte et legere", "Faible consommation energie"]
+                            },
+                            {
+                                id: 3,
+                                name: "HP Smart Tank 581",
+                                type: "Imprimante Multifonction WiFi",
+                                image: "https://www.hp.com/content/dam/sites/worldwide/laptops/premium-business-notebooks-new/hp-smart-tank-580-wireless-all-in-one-light-basalt@2x.jpg",
+                                badge: "PREMIUM",
+                                price: 165,
+                                oldPrice: null,
+                                features: ["Impression, copie, numerisation", "Reservoir d'encre haute capacite", "Connectivite WiFi integree", "Impression mobile HP Smart"]
+                            }
+                        ]
+                    }
+                ]
+            };
+        }
+        
+        // Save Data
+        function saveData() {
+            localStorage.setItem('catalogueData', JSON.stringify(catalogueData));
+            showToast('Sauvegardé avec succès!');
+        }
+        
+        // Load Pages
+        function loadPages() {
+            const pageList = document.getElementById('pageList');
+            pageList.innerHTML = '';
+            
+            catalogueData.pages.forEach((page, index) => {
+                const li = document.createElement('li');
+                li.className = `page-item ${currentPageId === page.id ? 'active' : ''}`;
+                li.innerHTML = `
+                    <span class="page-name">Page ${index + 1}: ${page.name}</span>
+                    <span class="page-count">${page.products.length} articles</span>
+                `;
+                li.onclick = () => loadPage(page.id);
+                pageList.appendChild(li);
+            });
+        }
+        
+        // Load Page
+        function loadPage(pageId) {
+            currentPageId = pageId;
+            const page = catalogueData.pages.find(p => p.id === pageId);
+            
+            if (!page) return;
+            
+            document.getElementById('pageTitle').textContent = page.name;
+            document.getElementById('pageTitleInput').value = page.title;
+            document.getElementById('pageBannerInput').value = page.banner;
+            document.getElementById('pageSettings').style.display = 'block';
+            document.getElementById('btnAddProduct').style.display = 'block';
+            
+            // Add event listeners for page settings
+            document.getElementById('pageTitleInput').onchange = () => {
+                page.title = document.getElementById('pageTitleInput').value;
+                saveData();
+            };
+            document.getElementById('pageBannerInput').onchange = () => {
+                page.banner = document.getElementById('pageBannerInput').value;
+                saveData();
+            };
+            
+            loadProducts(page);
+            loadPages();
+        }
+        
+        // Load Products
+        function loadProducts(page) {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = '';
+            
+            page.products.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-admin-card';
+                card.innerHTML = `
+                    <div class="product-admin-image">
+                        <img src="${product.image}" alt="${product.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 150%22><rect fill=%22%23333%22 width=%22200%22 height=%22150%22/><text x=%2250%%22 y=%2250%%22 text-anchor=%22middle%22 fill=%22%23888%22>Image</text></svg>'">
+                        <button class="btn-change-image" onclick="changeImage(${product.id})">Changer image</button>
+                    </div>
+                    <div class="product-admin-content">
+                        <input type="text" class="product-admin-name" value="${product.name}" 
+                               style="background:transparent;border:none;color:#fff;font-size:1em;font-weight:700;width:100%;"
+                               onchange="updateProduct(${product.id}, 'name', this.value)">
+                        <input type="text" class="product-admin-type" value="${product.type}"
+                               style="background:transparent;border:none;color:#888;font-size:0.75em;width:100%;"
+                               onchange="updateProduct(${product.id}, 'type', this.value)">
+                        
+                        <div class="product-admin-prices">
+                            <div class="price-input-group">
+                                <label>Prix promo</label>
+                                <input type="number" value="${product.price}" 
+                                       onchange="updateProduct(${product.id}, 'price', parseFloat(this.value))">
+                            </div>
+                            <div class="price-input-group">
+                                <label>Ancien prix</label>
+                                <input type="number" value="${product.oldPrice || ''}" placeholder="-"
+                                       onchange="updateProduct(${product.id}, 'oldPrice', this.value ? parseFloat(this.value) : null)">
+                            </div>
+                        </div>
+                        
+                        <div class="price-input-group" style="margin-bottom:15px;">
+                            <label>Badge</label>
+                            <input type="text" value="${product.badge || ''}" placeholder="Ex: -20%, PROMO"
+                                   style="background:#1a1a2e;border:1px solid #333;color:#fff;padding:8px;border-radius:4px;"
+                                   onchange="updateProduct(${product.id}, 'badge', this.value)">
+                        </div>
+                        
+                        <div class="product-admin-features">
+                            <label>Caractéristiques (une par ligne)</label>
+                            <textarea onchange="updateProduct(${product.id}, 'features', this.value.split('\\n'))">${product.features.join('\n')}</textarea>
+                        </div>
+                        
+                        <div class="product-admin-actions">
+                            <button class="btn-save" onclick="saveData()">Sauvegarder</button>
+                            <button class="btn-delete" onclick="deleteProduct(${product.id})">Supprimer</button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+        
+        // Update Product
+        function updateProduct(productId, field, value) {
+            const page = catalogueData.pages.find(p => p.id === currentPageId);
+            const product = page.products.find(p => p.id === productId);
+            if (product) {
+                product[field] = value;
+                saveData();
+            }
+        }
+        
+        // Change Image
+        function changeImage(productId) {
+            const newUrl = prompt('Entrez l\'URL de la nouvelle image:');
+            if (newUrl) {
+                updateProduct(productId, 'image', newUrl);
+                loadPage(currentPageId);
+            }
+        }
+        
+        // Delete Product
+        function deleteProduct(productId) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer cet article?')) {
+                const page = catalogueData.pages.find(p => p.id === currentPageId);
+                page.products = page.products.filter(p => p.id !== productId);
+                saveData();
+                loadPage(currentPageId);
+            }
+        }
+        
+        // Add Page
+        function addPage() {
+            const name = document.getElementById('newPageName').value;
+            const title = document.getElementById('newPageTitle').value;
+            const banner = document.getElementById('newPageBanner').value;
+            
+            if (!name) {
+                showToast('Veuillez entrer un nom de page', true);
+                return;
+            }
+            
+            const newId = Math.max(...catalogueData.pages.map(p => p.id), 0) + 1;
+            catalogueData.pages.push({
+                id: newId,
+                name: name,
+                title: title || name,
+                banner: banner || 'Offres Promotionnelles',
+                products: []
+            });
+            
+            saveData();
+            closeModal('addPageModal');
+            loadPages();
+            loadPage(newId);
+            
+            // Clear form
+            document.getElementById('newPageName').value = '';
+            document.getElementById('newPageTitle').value = '';
+            document.getElementById('newPageBanner').value = '';
+        }
+        
+        // Add Product
+        function addProduct() {
+            const name = document.getElementById('newProductName').value;
+            const type = document.getElementById('newProductType').value;
+            const image = document.getElementById('newProductImage').value;
+            const badge = document.getElementById('newProductBadge').value;
+            const price = parseFloat(document.getElementById('newProductPrice').value);
+            const oldPrice = document.getElementById('newProductOldPrice').value ? parseFloat(document.getElementById('newProductOldPrice').value) : null;
+            const features = document.getElementById('newProductFeatures').value.split('\n').filter(f => f.trim());
+            
+            if (!name || !price) {
+                showToast('Veuillez remplir le nom et le prix', true);
+                return;
+            }
+            
+            const page = catalogueData.pages.find(p => p.id === currentPageId);
+            const newId = Math.max(...page.products.map(p => p.id), 0) + 1;
+            
+            page.products.push({
+                id: newId,
+                name: name,
+                type: type || 'Article',
+                image: image || '',
+                badge: badge || '',
+                price: price,
+                oldPrice: oldPrice,
+                features: features.length ? features : ['Caractéristique 1']
+            });
+            
+            saveData();
+            closeModal('addProductModal');
+            loadPage(currentPageId);
+            
+            // Clear form
+            document.getElementById('newProductName').value = '';
+            document.getElementById('newProductType').value = '';
+            document.getElementById('newProductImage').value = '';
+            document.getElementById('newProductBadge').value = '';
+            document.getElementById('newProductPrice').value = '';
+            document.getElementById('newProductOldPrice').value = '';
+            document.getElementById('newProductFeatures').value = '';
+        }
+        
+        // Modal Functions
+        function openAddPageModal() {
+            document.getElementById('addPageModal').classList.add('active');
+        }
+        
+        function openAddProductModal() {
+            document.getElementById('addProductModal').classList.add('active');
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+        
+        // Toast
+        function showToast(message, isError = false) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast' + (isError ? ' error' : '');
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+        
+        // Generate Catalogue
+        function generateCatalogue() {
+            const html = generateCatalogueHTML();
+            const blob = new Blob([html], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            
+            // Save to file
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Catalogue_Promo_NewMalamba.html';
+            a.click();
+            
+            // Also open in new tab
+            window.open(url, '_blank');
+            
+            showToast('Catalogue généré avec succès!');
+        }
+        
+        function generateCatalogueHTML() {
+            let pagesHTML = '';
+            const totalPages = catalogueData.pages.length;
+            
+            catalogueData.pages.forEach((page, pageIndex) => {
+                let productsHTML = '';
+                page.products.forEach(product => {
+                    const oldPriceHTML = product.oldPrice ? `<div class="old-price">${product.oldPrice}$</div>` : '';
+                    const savingsHTML = product.oldPrice ? `<div class="savings-tag">-${product.oldPrice - product.price}$ OFFERT</div>` : 
+                                       (product.badge ? `<div class="savings-tag">${product.badge}</div>` : '');
+                    
+                    productsHTML += `
+                        <div class="product-card">
+                            ${product.badge ? `<div class="badge-container"><span class="badge-promo">${product.badge}</span></div>` : ''}
+                            <div class="product-image">
+                                <img src="${product.image}" alt="${product.name}">
+                            </div>
+                            <div class="product-content">
+                                <h3 class="product-name">${product.name}</h3>
+                                <p class="product-type">${product.type}</p>
+                                <ul class="features-list">
+                                    ${product.features.map(f => `<li>${f}</li>`).join('')}
+                                </ul>
+                                <div class="price-container">
+                                    <div class="price-left">
+                                        ${oldPriceHTML}
+                                        ${savingsHTML}
+                                    </div>
+                                    <div class="price-right">
+                                        <div class="new-price">${product.price}$</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                pagesHTML += `
+                    <div class="page">
+                        <header class="header">
+                            <h1 class="company-name">${catalogueData.companyName}</h1>
+                            <p class="tagline">${catalogueData.tagline}</p>
+                        </header>
+                        <div class="promo-banner">${page.banner}</div>
+                        <section class="products-section">
+                            <h2 class="section-title">${page.title}</h2>
+                            <div class="products-grid">
+                                ${productsHTML}
+                            </div>
+                        </section>
+                        <section class="cta-section">
+                            <p class="cta-text">Contactez-nous des maintenant</p>
+                            <p class="cta-subtext">Quantites limitees - Offre exclusive</p>
+                        </section>
+                        <footer class="footer">
+                            <p class="footer-company">${catalogueData.companyName}</p>
+                            <p class="footer-info">Offre valable dans la limite des stocks | Janvier 2026</p>
+                        </footer>
+                        <div class="page-number">Page ${pageIndex + 1}/${totalPages}</div>
+                    </div>
+                `;
+            });
+            
+            return `<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalogue Promotionnel - ${catalogueData.companyName.toUpperCase()}</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            color-adjust: exact !important;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #0f0f0f;
+            min-height: 100vh;
+            padding: 10px;
+        }
+        
+        .page {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto 20px;
+            background: #ffffff;
+            position: relative;
+            page-break-after: always;
+        }
+        
+        .page:last-child {
+            page-break-after: avoid;
+            margin-bottom: 0;
+        }
+        
+        .header {
+            background: #ffffff;
+            padding: 25px 30px 15px;
+            text-align: center;
+        }
+        
+        .company-name {
+            font-size: 2.2em;
+            font-weight: 900;
+            letter-spacing: 4px;
+            color: #0a0a0a;
+            text-transform: uppercase;
+        }
+        
+        .tagline {
+            font-size: 0.75em;
+            font-weight: 400;
+            color: #666;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+        
+        .promo-banner {
+            background: #0a0a0a;
+            color: #ffffff;
+            text-align: center;
+            padding: 8px;
+            font-size: 0.7em;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+        
+        .products-section {
+            padding: 20px 25px;
+            background: #fafafa;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 0.8em;
+            color: #0a0a0a;
+            margin-bottom: 20px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        
+        .product-card {
+            background: #ffffff;
+            position: relative;
+        }
+        
+        .badge-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10;
+        }
+        
+        .badge-promo {
+            background: #0a0a0a;
+            color: #fff;
+            padding: 4px 10px;
+            font-size: 0.5em;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        
+        .product-image {
+            height: 120px;
+            background: linear-gradient(135deg, #f8f8f8 0%, #f0f0f0 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+        }
+        
+        .product-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .product-content {
+            padding: 15px;
+        }
+        
+        .product-name {
+            font-size: 0.85em;
+            font-weight: 700;
+            color: #0a0a0a;
+            margin-bottom: 2px;
+        }
+        
+        .product-type {
+            font-size: 0.6em;
+            color: #888;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        
+        .features-list {
+            list-style: none;
+            margin-bottom: 12px;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+        }
+        
+        .features-list li {
+            padding: 2px 0;
+            font-size: 0.55em;
+            color: #555;
+            line-height: 1.4;
+            padding-left: 10px;
+            position: relative;
+        }
+        
+        .features-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 4px;
+            height: 4px;
+            background: #0a0a0a;
+            border-radius: 50%;
+        }
+        
+        .price-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
+            background: #0a0a0a;
+            margin-top: 10px;
+        }
+        
+        .old-price {
+            font-size: 0.55em;
+            color: #888;
+            text-decoration: line-through;
+        }
+        
+        .new-price {
+            font-size: 1.3em;
+            font-weight: 800;
+            color: #ffffff;
+            animation: glowPrice 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes glowPrice {
+            0%, 100% { text-shadow: 0 0 5px rgba(255,255,255,0.3); }
+            50% { text-shadow: 0 0 20px rgba(255,255,255,0.8), 0 0 30px rgba(255,255,255,0.4); }
+        }
+        
+        .savings-tag {
+            font-size: 0.5em;
+            color: #00ff88;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        .cta-section {
+            background: #ffffff;
+            text-align: center;
+            padding: 15px 20px;
+        }
+        
+        .cta-text {
+            font-size: 0.65em;
+            font-weight: 600;
+            color: #0a0a0a;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        .cta-subtext {
+            font-size: 0.55em;
+            color: #888;
+            margin-top: 3px;
+        }
+        
+        .footer {
+            background: #8b0000;
+            color: #ffffff;
+            text-align: center;
+            padding: 15px;
+        }
+        
+        .footer-company {
+            font-size: 0.9em;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+        
+        .footer-info {
+            font-size: 0.5em;
+            color: #ffffff;
+            margin-top: 5px;
+        }
+        
+        .page-number {
+            position: absolute;
+            bottom: 60px;
+            right: 20px;
+            font-size: 0.6em;
+            color: #999;
+        }
+        
+        .download-section {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .download-btn {
+            padding: 12px 24px;
+            background: #0a0a0a;
+            color: white;
+            border: none;
+            font-size: 0.8em;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        
+        @media print {
+            body { background: white; padding: 0; }
+            .download-section { display: none; }
+            .promo-banner { background: #0a0a0a !important; color: #fff !important; }
+            .price-container { background: #0a0a0a !important; }
+            .new-price { animation: none; color: #fff !important; }
+            .footer { background: #8b0000 !important; }
+        }
+        
+        @page { size: A4 landscape; margin: 5mm; }
+    </style>
+</head>
+<body>
+    ${pagesHTML}
+    <div class="download-section">
+        <button class="download-btn" onclick="window.print()">Telecharger PDF</button>
+    </div>
+</body>
+</html>`;
+        }
+        
+        // Initialize
+        loadPages();
+        if (catalogueData.pages.length > 0) {
+            loadPage(catalogueData.pages[0].id);
+        }
+    </script>
+</body>
+</html>

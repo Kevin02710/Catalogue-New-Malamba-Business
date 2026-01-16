@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalogue Promotionnel - NEW MALAMBA BUSINESS</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            color-adjust: exact !important;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #0f0f0f;
+            min-height: 100vh;
+            padding: 10px;
+        }
+        
+        .page {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto 20px;
+            background: #ffffff;
+            position: relative;
+            page-break-after: always;
+        }
+        
+        .page:last-child {
+            page-break-after: avoid;
+            margin-bottom: 0;
+        }
+        
+        /* Header */
+        .header {
+            background: #ffffff;
+            padding: 25px 30px 15px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .company-name {
+            font-size: 2.2em;
+            font-weight: 900;
+            letter-spacing: 4px;
+            color: #0a0a0a;
+            text-transform: uppercase;
+        }
+        
+        .tagline {
+            font-size: 0.75em;
+            font-weight: 400;
+            color: #666;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+        
+        /* Promo Banner */
+        .promo-banner {
+            background: #0a0a0a;
+            color: #ffffff;
+            text-align: center;
+            padding: 8px;
+            font-size: 0.7em;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+        
+        /* Products Section */
+        .products-section {
+            padding: 20px 25px;
+            background: #fafafa;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 0.8em;
+            color: #0a0a0a;
+            margin-bottom: 20px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        
+        /* Product Card */
+        .product-card {
+            background: #ffffff;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .badge-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10;
+        }
+        
+        .badge-promo {
+            background: #0a0a0a;
+            color: #fff;
+            padding: 4px 10px;
+            font-size: 0.5em;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        
+        .product-image {
+            height: 120px;
+            background: linear-gradient(135deg, #f8f8f8 0%, #f0f0f0 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+        }
+        
+        .product-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1));
+        }
+        
+        .product-content {
+            padding: 15px;
+        }
+        
+        .product-name {
+            font-size: 0.85em;
+            font-weight: 700;
+            color: #0a0a0a;
+            margin-bottom: 2px;
+        }
+        
+        .product-type {
+            font-size: 0.6em;
+            color: #888;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        
+        .features-list {
+            list-style: none;
+            margin-bottom: 12px;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+        }
+        
+        .features-list li {
+            padding: 2px 0;
+            font-size: 0.55em;
+            color: #555;
+            line-height: 1.4;
+            padding-left: 10px;
+            position: relative;
+        }
+        
+        .features-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 4px;
+            height: 4px;
+            background: #0a0a0a;
+            border-radius: 50%;
+        }
+        
+        /* PRIX - Design raffine */
+        .price-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
+            background: #0a0a0a;
+            margin-top: 10px;
+        }
+        
+        .price-left {
+            text-align: left;
+        }
+        
+        .old-price {
+            font-size: 0.55em;
+            color: #888;
+            text-decoration: line-through;
+            font-weight: 400;
+        }
+        
+        .price-right {
+            text-align: right;
+        }
+        
+        .new-price {
+            font-size: 1.3em;
+            font-weight: 800;
+            color: #ffffff;
+            animation: glowPrice 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes glowPrice {
+            0%, 100% { 
+                text-shadow: 0 0 5px rgba(255,255,255,0.3);
+            }
+            50% { 
+                text-shadow: 0 0 20px rgba(255,255,255,0.8), 0 0 30px rgba(255,255,255,0.4);
+            }
+        }
+        
+        .savings-tag {
+            font-size: 0.5em;
+            color: #00ff88;
+            font-weight: 600;
+            letter-spacing: 1px;
+            animation: pulseGreen 1s ease-in-out infinite;
+        }
+        
+        @keyframes pulseGreen {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            background: #ffffff;
+            text-align: center;
+            padding: 15px 20px;
+        }
+        
+        .cta-text {
+            font-size: 0.65em;
+            font-weight: 600;
+            color: #0a0a0a;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        .cta-subtext {
+            font-size: 0.55em;
+            color: #888;
+            margin-top: 3px;
+            letter-spacing: 1px;
+        }
+        
+        /* Footer */
+        .footer {
+            background: #8b0000;
+            color: #ffffff;
+            text-align: center;
+            padding: 15px;
+        }
+        
+        .footer-company {
+            font-size: 0.9em;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+        
+        .footer-info {
+            font-size: 0.5em;
+            color: #ffffff;
+            margin-top: 5px;
+            letter-spacing: 1px;
+        }
+        
+        /* Page number */
+        .page-number {
+            position: absolute;
+            bottom: 60px;
+            right: 20px;
+            font-size: 0.6em;
+            color: #999;
+            letter-spacing: 1px;
+        }
+        
+        /* Download Button */
+        .download-section {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .download-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: #0a0a0a;
+            color: white;
+            border: none;
+            font-size: 0.8em;
+            font-weight: 600;
+            cursor: pointer;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+        
+        .download-btn:hover {
+            background: #333;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .download-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+        
+        /* Print styles for PDF */
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+            
+            body {
+                background: white !important;
+                padding: 0;
+            }
+            
+            .page {
+                box-shadow: none;
+                margin-bottom: 0;
+            }
+            
+            .download-section {
+                display: none;
+            }
+            
+            .product-card:hover {
+                transform: none;
+                box-shadow: none;
+            }
+            
+            .promo-banner {
+                background: #0a0a0a !important;
+                color: #ffffff !important;
+            }
+            
+            .price-container {
+                background: #0a0a0a !important;
+            }
+            
+            .new-price {
+                animation: none;
+                text-shadow: none;
+                color: #ffffff !important;
+            }
+            
+            .savings-tag {
+                animation: none;
+                color: #00cc6a !important;
+            }
+            
+            .badge-promo {
+                background: #0a0a0a !important;
+                color: #ffffff !important;
+            }
+            
+            .footer {
+                background: #8b0000 !important;
+                color: #ffffff !important;
+            }
+            
+            .footer-company {
+                color: #ffffff !important;
+            }
+        }
+        
+        @page {
+            size: A4 landscape;
+            margin: 5mm;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== PAGE 1 ==================== -->
+    <div class="page">
+        <!-- Header -->
+        <header class="header">
+            <h1 class="company-name">New Malamba Business</h1>
+            <p class="tagline">Votre partenaire de qualité au meilleur prix !</p>
+        </header>
+        
+        <!-- Promo Banner -->
+        <div class="promo-banner">
+            Offres Promotionnelles Exceptionnelles
+        </div>
+        
+        <!-- Products Section -->
+        <section class="products-section">
+            <h2 class="section-title">Selection Premium - Imprimantes EcoTank</h2>
+            
+            <div class="products-grid">
+                <!-- Product 1: Epson EcoTank L3250 -->
+                <div class="product-card">
+                    <div class="badge-container">
+                        <span class="badge-promo">-26%</span>
+                    </div>
+                    <div class="product-image">
+                        <img src="https://robot.epson.eu/files/assets/converted/1500m-1500m/a/1/7/8/a17899-productpicture-hires-en-int-l3250_1.header_2000x2000.png.png" 
+                             alt="Epson EcoTank L3250">
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-name">Epson EcoTank L3250 et L3252</h3>
+                        <p class="product-type">Imprimante Multifonction WiFi</p>
+                        <ul class="features-list">
+                            <li>Impression, copie et numerisation sans fil</li>
+                            <li>Economisez jusqu'a 95% sur vos couts</li>
+                            <li>3 ans d'encre fournie (8 100 pages)</li>
+                            <li>Application Epson Smart Panel</li>
+                        </ul>
+                        <div class="price-container">
+                            <div class="price-left">
+                                <div class="old-price">230$</div>
+                                <div class="savings-tag">-60$ OFFERT</div>
+                            </div>
+                            <div class="price-right">
+                                <div class="new-price">170$</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 2: Epson EcoTank L3210 -->
+                <div class="product-card">
+                    <div class="badge-container">
+                        <span class="badge-promo">-26%</span>
+                    </div>
+                    <div class="product-image">
+                        <img src="https://robot.epson.eu/files/assets/converted/1500m-1500m/3/0/2/2/30221-productpicture-lores-en-int-l3210_main.png.png" 
+                             alt="Epson EcoTank L3210">
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-name">Epson EcoTank L3210</h3>
+                        <p class="product-type">Imprimante Multifonction</p>
+                        <ul class="features-list">
+                            <li>Impression, copie et numerisation</li>
+                            <li>Economisez jusqu'a 95% sur vos couts</li>
+                            <li>3 ans d'encre fournie (8 100 pages)</li>
+                            <li>Reservoir d'encre en facade</li>
+                        </ul>
+                        <div class="price-container">
+                            <div class="price-left">
+                                <div class="old-price">230$</div>
+                                <div class="savings-tag">-60$ OFFERT</div>
+                            </div>
+                            <div class="price-right">
+                                <div class="new-price">170$</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 3: HP DeskJet 2320 -->
+                <div class="product-card">
+                    <div class="badge-container">
+                        <span class="badge-promo">-23%</span>
+                    </div>
+                    <div class="product-image">
+                        <img src="https://hp.widen.net/content/cbbj7ui8uv/png/cbbj7ui8uv.png?w=800&h=600&dpi=72&color=ffffff00" 
+                             alt="HP DeskJet 2320">
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-name">HP DeskJet 2320</h3>
+                        <p class="product-type">Imprimante Tout-en-Un</p>
+                        <ul class="features-list">
+                            <li>Impression, copie, numerisation</li>
+                            <li>Vitesse: 7,5 ppm noir / 5,5 ppm couleur</li>
+                            <li>Qualite: 1200 x 1200 ppp</li>
+                            <li>Design compact et elegant</li>
+                        </ul>
+                        <div class="price-container">
+                            <div class="price-left">
+                                <div class="old-price">65$</div>
+                                <div class="savings-tag">-15$ OFFERT</div>
+                            </div>
+                            <div class="price-right">
+                                <div class="new-price">50$</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <p class="cta-text">Contactez-nous des maintenant</p>
+            <p class="cta-subtext">WhatsApp : +243840855047 | E-mail : contact@malambabusiness.com</p>
+        </section>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <p class="footer-company">New Malamba Business</p>
+            <p class="footer-info">Offre valable dans la limite des stocks | Janvier 2026</p>
+        </footer>
+        
+        <div class="page-number">Page 1/2</div>
+    </div>
+
+    <!-- ==================== PAGE 2 ==================== -->
+    <div class="page">
+        <!-- Header -->
+        <header class="header">
+            <h1 class="company-name">New Malamba Business</h1>
+            <p class="tagline">Votre partenaire de qualité au meilleur prix !</p>
+        </header>
+        
+        <!-- Promo Banner -->
+        <div class="promo-banner">
+            Imprimantes HP LaserJet - Selection Pro
+        </div>
+        
+        <!-- Products Section -->
+        <section class="products-section">
+            <h2 class="section-title">Gamme Professionnelle</h2>
+            
+            <div class="products-grid">
+                <!-- Product 1: HP LaserJet M141a -->
+                <div class="product-card">
+                    <div class="badge-container">
+                        <span class="badge-promo">PRO</span>
+                    </div>
+                    <div class="product-image">
+                        <img src="https://hp.widen.net/content/u0elxq9zq4/png/u0elxq9zq4.png?w=800&h=600&dpi=72&color=ffffff00" 
+                             alt="HP LaserJet MFP M141a">
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-name">HP LaserJet MFP M141a</h3>
+                        <p class="product-type">Imprimante Laser Multifonction</p>
+                        <ul class="features-list">
+                            <li>Impression, copie et numerisation</li>
+                            <li>Vitesse jusqu'a 20 ppm</li>
+                            <li>Resolution 600 x 600 ppp</li>
+                            <li>Connexion USB, ideal bureau</li>
+                        </ul>
+                        <div class="price-container">
+                            <div class="price-left">
+                                <div class="savings-tag">LASER PRO</div>
+                            </div>
+                            <div class="price-right">
+                                <div class="new-price">160$</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 2: HP LaserJet M111a -->
+                <div class="product-card">
+                    <div class="badge-container">
+                        <span class="badge-promo">COMPACT</span>
+                    </div>
+                    <div class="product-image">
+                        <img src="https://hk-media.apjonlinecdn.com/catalog/product/cache/b3b166914d87ce343d4dc5ec5117b502/7/M/7MD67A-1_T1678934497.png" 
+                             alt="HP LaserJet M111a">
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-name">HP LaserJet M111a</h3>
+                        <p class="product-type">Imprimante Laser Compacte</p>
+                        <ul class="features-list">
+                            <li>Impression laser monochrome</li>
+                            <li>Vitesse jusqu'a 20 ppm</li>
+                            <li>Ultra compacte et legere</li>
+                            <li>Faible consommation energie</li>
+                        </ul>
+                        <div class="price-container">
+                            <div class="price-left">
+                                <div class="savings-tag">BEST VALUE</div>
+                            </div>
+                            <div class="price-right">
+                                <div class="new-price">115$</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 3: HP 581 -->
+                <div class="product-card">
+                    <div class="badge-container">
+                        <span class="badge-promo">PREMIUM</span>
+                    </div>
+                    <div class="product-image">
+                        <img src="https://www.hp.com/content/dam/sites/worldwide/laptops/premium-business-notebooks-new/hp-smart-tank-580-wireless-all-in-one-light-basalt@2x.jpg" 
+                             alt="HP Smart Tank 581">
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-name">HP Smart Tank 581</h3>
+                        <p class="product-type">Imprimante Multifonction WiFi</p>
+                        <ul class="features-list">
+                            <li>Impression, copie, numerisation</li>
+                            <li>Reservoir d'encre haute capacite</li>
+                            <li>Connectivite WiFi integree</li>
+                            <li>Impression mobile HP Smart</li>
+                        </ul>
+                        <div class="price-container">
+                            <div class="price-left">
+                                <div class="savings-tag">WIFI INCLUS</div>
+                            </div>
+                            <div class="price-right">
+                                <div class="new-price">165$</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <p class="cta-text">Contactez-nous des maintenant</p>
+            <p class="cta-subtext">WhatsApp : +243840855047 | E-mail : contact@malambabusiness.com</p>
+        </section>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <p class="footer-company">New Malamba Business</p>
+            <p class="footer-info">Offre valable dans la limite des stocks | Janvier 2026</p>
+        </footer>
+        
+        <div class="page-number">Page 2/2</div>
+    </div>
+    
+    <!-- Download Button -->
+    <div class="download-section">
+        <button class="download-btn" onclick="window.print()">
+            <svg fill="currentColor" viewBox="0 0 24 24">
+                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+            </svg>
+            Telecharger PDF
+        </button>
+    </div>
+</body>
+</html>
